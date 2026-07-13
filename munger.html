@@ -181,6 +181,26 @@
     text-align:center;margin-top:26px;color:#8b93a8;font-size:.8rem;
     font-style:italic;
   }
+
+  .alerta{background:#fbeeea;border-left:4px solid #b3452e;padding:14px 16px;
+    border-radius:0 8px 8px 0;margin-bottom:16px;font-size:.93rem;line-height:1.55;}
+  .alerta h3{color:#8f3423;font-size:.82rem;margin-bottom:6px;
+    font-family:Verdana,Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;}
+  .gravidade{display:block;font-family:Verdana,Arial,sans-serif;font-size:.72rem;
+    letter-spacing:.8px;margin:0 0 14px;font-weight:bold;}
+  .medidor{position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex;margin-top:14px;}
+  .medidor div{height:100%;}
+  .marcador{position:absolute;top:10px;width:4px;height:34px;background:#1c2130;border-radius:2px;}
+  .zonas{display:flex;font-family:Verdana,Arial,sans-serif;font-size:.6rem;color:#6b7280;
+    margin:4px 0 14px;letter-spacing:.5px;}
+  .linha-sit{display:flex;align-items:center;gap:10px;padding:9px 0;
+    border-bottom:1px solid #e0d3b3;font-size:.9rem;}
+  .linha-sit .barra-q{flex:0 0 90px;height:12px;background:#eee3cb;border-radius:6px;overflow:hidden;}
+  .linha-sit .barra-q div{height:100%;}
+  .cobertura{background:#fdf9ef;border:1px solid #e2d5b2;border-radius:10px;
+    padding:14px 16px;margin:16px 0;font-size:.92rem;line-height:1.55;}
+  .cobertura .trilho{height:14px;background:#eee3cb;border-radius:7px;overflow:hidden;margin:8px 0;}
+  .cobertura .trilho div{height:100%;background:linear-gradient(90deg,var(--gold),#e8c25a);}
 </style>
 </head>
 <body>
@@ -220,8 +240,12 @@
       </div>
     </div>
 
+    <div class="alerta">
+      <h3>⚠ Ponto de atenção antes de começar</h3>
+      <p>No chão de fábrica real, escolhas como as que você fará aqui já custaram a engenheiros de verdade: <strong>o emprego</strong>; <strong>a vida e a integridade física</strong>, em acidentes; <strong>a saúde física e mental</strong>; <strong>conflitos pessoais graves</strong>; <strong>grandes prejuízos à empresa e a terceiros</strong>; e até <strong>processos judiciais e prisão</strong>. Uma carreira de 35 anos apresenta cerca de <strong>105 situações significativas</strong> — 2 a 3 por ano, mais raras porém proporcionalmente mais graves à medida que se sobe na hierarquia. Trate cada escolha como se fosse real.</p>
+    </div>
     <div class="regras">
-      <strong>Regras do jogo:</strong> em cada situação, escolha entre 5 atitudes possíveis a que você tomaria de verdade. Cada escolha revela a <strong>consequência</strong> — para você e para quem está ao seu lado — e a lição de <strong>Charlie Munger</strong> (1924–2023), sócio de Warren Buffett e autor do célebre catálogo dos 25 vieses do julgamento humano. Boas escolhas rendem <strong>anos de experiência</strong>; más escolhas custam caro. Nesta amostra, o máximo é <strong>12 anos</strong>.
+      <strong>Regras do jogo:</strong> em cada situação, escolha entre 5 atitudes possíveis a que você tomaria de verdade. Cada escolha revela a <strong>consequência</strong> — para você e para quem está ao seu lado — e a lição de <strong>Charlie Munger</strong> (1924–2023), sócio de Warren Buffett e autor do célebre catálogo dos 25 vieses do julgamento humano. Cada situação traz um <strong>selo de gravidade</strong> — algumas custam reputação; outras, a liberdade ou vidas, e pesam dobrado. Ao final, você recebe seu <strong>índice de prudência relacional</strong> com referência visual e a medida honesta do quanto esta amostra cobre de uma carreira.
     </div>
 
     <button class="principal" onclick="iniciar()">⚜ Começar</button>
@@ -235,6 +259,7 @@
     </div>
     <div class="progresso"><div id="barra"></div></div>
     <span class="categoria" id="cat"></span>
+    <span class="gravidade" id="grav"></span>
     <h2 id="titulo"></h2>
     <p class="situacao" id="situacao"></p>
     <div id="alternativas"></div>
@@ -255,15 +280,25 @@
   <div id="tela-resultado" class="cartao oculto">
     <span class="selo">Resultado — Versão Charlie Munger</span>
     <div class="placar-final">
-      <div class="numero" id="total-final"></div>
-      <div class="rotulo">anos de experiência conquistados (de 12 possíveis)</div>
+      <div class="numero" id="indice-final"></div>
+      <div class="rotulo">índice de prudência relacional nesta amostra</div>
+    </div>
+    <div style="position:relative">
+      <div class="medidor">
+        <div style="width:40%;background:#d8836f"></div>
+        <div style="width:30%;background:#e5b566"></div>
+        <div style="width:20%;background:#7fb894"></div>
+        <div style="width:10%;background:#3f8f63"></div>
+      </div>
+      <div class="marcador" id="marcador"></div>
+    </div>
+    <div class="zonas">
+      <span style="width:40%">VULNERÁVEL</span><span style="width:30%">ATENÇÃO</span><span style="width:20%">PRUDENTE</span><span style="width:10%">ESTADISTA</span>
     </div>
     <div class="perfil" id="perfil"></div>
-    <h2 style="font-size:1.05rem">Revisão das suas escolhas</h2>
-    <table class="recap">
-      <thead><tr><th>Situação</th><th>Sua atitude</th><th>Anos</th></tr></thead>
-      <tbody id="recap-corpo"></tbody>
-    </table>
+    <h2 style="font-size:1.05rem">Por situação</h2>
+    <div id="linhas-situacoes"></div>
+    <div class="cobertura" id="cobertura"></div>
     <button class="principal" onclick="reiniciar()">⟲ Refazer a demonstração</button>
   </div>
 
@@ -279,6 +314,7 @@ const QUESTOES = [
 {
 cat:"Engenheiros pares",
  titulo:"A ideia roubada no café",
+ grav:"moderada",
  situacao:"Em reunião com o diretor, um engenheiro do seu mesmo nível apresenta como dele a solução técnica que você desenvolveu e comentou informalmente com ele no café, na semana anterior. O diretor está impressionado e elogia o 'autor' na frente de todos.",
  citacao:"Mostre-me o incentivo e eu lhe mostrarei o resultado. Nunca pense em outra coisa quando deveria estar pensando no poder dos incentivos.",
  fonte:"Charlie Munger, A Psicologia dos Erros de Julgamento Humano",
@@ -298,6 +334,7 @@ cat:"Engenheiros pares",
 {
 cat:"Diretoria",
  titulo:"A assinatura sob pressão",
+ grav:"maxima",
  situacao:"O diretor pressiona você a assinar a liberação de um equipamento com pendências de segurança, para cumprir o prazo prometido ao cliente: 'depois a gente regulariza, todo mundo faz assim'. A ART é sua. O prazo é amanhã.",
  citacao:"‘De quem como o pão, dele canto a canção.’ O viés do incentivo torna as pessoas cegas exatamente para aquilo de que o seu sustento depende.",
  fonte:"Charlie Munger, A Psicologia dos Erros de Julgamento Humano",
@@ -317,6 +354,7 @@ cat:"Diretoria",
 {
 cat:"A crise",
  titulo:"Madrugada de sexta-feira",
+ grav:"maxima",
  situacao:"Duas da manhã: falha grave na planta, princípio de incêndio controlado, um terceirizado hospitalizado em observação. A imprensa local já ligou na portaria. O diretor, em pânico, telefona: 'Resolve isso AGORA'. Todos os olhos — equipe, empresa, cidade — se voltam para você.",
  citacao:"É notável a vantagem de longo prazo que pessoas como nós obtiveram tentando apenas não ser consistentemente estúpidas, em vez de tentar ser muito inteligentes.",
  fonte:"Charlie Munger, Poor Charlie's Almanack",
@@ -339,15 +377,21 @@ cat:"A crise",
    PERFIS FINAIS
    ============================================================ */
 const PERFIS = [
- {min:10, nome:"🧮 Racional Consistente", desc:"Você fez o que Munger considerava todo o segredo: <strong>não foi consistentemente estúpido</strong>. Identificou os incentivos por trás de cada pressão, desconfiou da autoridade em pânico e da prova social, e usou sistemas (registro, checklist, inversão) no lugar do improviso. É o perfil que sobrevive aos lollapaloozas da carreira."},
- {min:6, nome:"⚖️ Racional Intermitente", desc:"Parte das suas escolhas seguiu a razão; outra parte foi capturada por vieses — provavelmente autoridade, prova social ou hostilidade. Releia as situações em que marcou 0 ou 1: identifique <em>qual viés</em> te pegou. Munger dizia que conhecer a lista já é metade da defesa."},
+ {min:70, nome:"🧮 Racional Consistente", desc:"Você fez o que Munger considerava todo o segredo: <strong>não foi consistentemente estúpido</strong>. Identificou os incentivos por trás de cada pressão, desconfiou da autoridade em pânico e da prova social, e usou sistemas (registro, checklist, inversão) no lugar do improviso. É o perfil que sobrevive aos lollapaloozas da carreira."},
+ {min:40, nome:"⚖️ Racional Intermitente", desc:"Parte das suas escolhas seguiu a razão; outra parte foi capturada por vieses — provavelmente autoridade, prova social ou hostilidade. Releia as situações em que errou: identifique <em>qual viés</em> te pegou. Munger dizia que conhecer a lista já é metade da defesa."},
  {min:0, nome:"🎪 Capturado pelos Vieses", desc:"Suas escolhas foram um desfile dos erros do catálogo de Munger: obedecer a autoridade errada, seguir o ‘todo mundo faz assim’, decidir com raiva, negar o problema. A boa notícia: vieses são previsíveis — e o que é previsível é evitável. Refaça o quiz perguntando a cada alternativa: ‘que incentivo está operando aqui?’"}
 ];
 
 /* ============================================================
    MOTOR DO QUIZ
    ============================================================ */
-let indice = 0, total = 0, historico = [];
+const GRAV = {
+ maxima:{peso:2, selo:"⛔ GRAVIDADE MÁXIMA", desc:"pode custar vidas, a liberdade e o registro profissional", cor:"#b3452e"},
+ alta:{peso:1.5, selo:"⚠ GRAVIDADE ALTA", desc:"pode custar o emprego, a saúde e anos de carreira", cor:"#c07f18"},
+ moderada:{peso:1, selo:"● GRAVIDADE MODERADA", desc:"pode custar promoções, relações e reputação", cor:"#2f6da8"}
+};
+const N_DIDATICO = 40, N_CARREIRA = 105;
+let indiceAtual = 0, historico = [];
 const LETRAS = ["a","b","c","d","e"];
 const $ = id => document.getElementById(id);
 
@@ -360,14 +404,18 @@ function embaralhar(arr){
   return a;
 }
 
-// pré-embaralha as alternativas de cada questão a cada rodada
 let ORDEM = [];
-function prepararRodada(){
-  ORDEM = QUESTOES.map(q => embaralhar(q.alts));
+function prepararRodada(){ ORDEM = QUESTOES.map(q => embaralhar(q.alts)); }
+
+function pctParcial(){
+  if(!historico.length) return null;
+  let s=0, w=0;
+  historico.forEach(h=>{ s += h.qual * GRAV[h.grav].peso; w += GRAV[h.grav].peso; });
+  return Math.round(100*s/w);
 }
 
 function iniciar(){
-  indice = 0; total = 0; historico = [];
+  indiceAtual = 0; historico = [];
   prepararRodada();
   $("tela-inicio").classList.add("oculto");
   $("tela-resultado").classList.add("oculto");
@@ -376,18 +424,21 @@ function iniciar(){
 }
 
 function render(){
-  const q = QUESTOES[indice];
-  $("contador").textContent = "Situação " + (indice+1) + " de " + QUESTOES.length;
-  $("placar-parcial").textContent = "⚜ " + total + (total===1?" ano":" anos") + " de experiência";
-  $("barra").style.width = (indice/QUESTOES.length*100) + "%";
+  const q = QUESTOES[indiceAtual];
+  $("contador").textContent = "Situação " + (indiceAtual+1) + " de " + QUESTOES.length;
+  const p = pctParcial();
+  $("placar-parcial").textContent = p===null ? "" : "Prudência parcial: " + p + "%";
+  $("barra").style.width = (indiceAtual/QUESTOES.length*100) + "%";
   $("cat").textContent = q.cat;
+  const g = GRAV[q.grav];
+  $("grav").textContent = g.selo + " — " + g.desc;
+  $("grav").style.color = g.cor;
   $("titulo").textContent = q.titulo;
   $("situacao").textContent = q.situacao;
   $("feedback").style.display = "none";
-
   const box = $("alternativas");
   box.innerHTML = "";
-  ORDEM[indice].forEach((alt,i)=>{
+  ORDEM[indiceAtual].forEach((alt,i)=>{
     const b = document.createElement("button");
     b.className = "alt";
     b.innerHTML = '<span class="letra">'+LETRAS[i]+')</span>'+alt.t;
@@ -400,48 +451,62 @@ function render(){
 function responder(botao, alt, q){
   document.querySelectorAll(".alt").forEach(b=>b.disabled=true);
   botao.classList.add("escolhida","n"+alt.anos);
-  total += alt.anos;
-  historico.push({titulo:q.titulo, cat:q.cat, escolha:alt.t, anos:alt.anos});
-
-  const v = $("veredito");
+  const qual = alt.anos/4;
+  historico.push({titulo:q.titulo, cat:q.cat, grav:q.grav, escolha:alt.t, qual:qual});
   const rotulos = {4:"Escolha prudente", 2:"Escolha razoável", 1:"Escolha arriscada", 0:"Escolha desastrosa"};
+  const v = $("veredito");
   v.textContent = rotulos[alt.anos];
   v.className = "veredito n"+alt.anos;
-
   $("consequencia").innerHTML = alt.cons;
   $("citacao").textContent = "“" + q.citacao + "”";
   $("fonte").textContent = "— " + q.fonte;
-  $("anos-chip").textContent = "⚜ +" + alt.anos + (alt.anos===1?" ano":" anos") + " de experiência";
-  $("placar-parcial").textContent = "⚜ " + total + (total===1?" ano":" anos") + " de experiência";
-  $("btn-proxima").textContent = (indice === QUESTOES.length-1) ? "Ver meu resultado →" : "Próxima situação →";
+  const custo = {maxima:"vidas, a liberdade e a carreira", alta:"o emprego e a saúde", moderada:"anos de relações e reputação"}[q.grav];
+  const chips = {
+    4:"✔ Lição antecipada por completo — de graça",
+    2:"◐ Lição antecipada pela metade",
+    1:"▲ Escolha arriscada — na vida real, esta lição viria com custo",
+    0:"✘ Na vida real, esta escolha poderia custar " + custo
+  };
+  $("anos-chip").textContent = chips[alt.anos];
+  $("placar-parcial").textContent = "Prudência parcial: " + pctParcial() + "%";
+  $("btn-proxima").textContent = (indiceAtual === QUESTOES.length-1) ? "Ver meu diagnóstico →" : "Próxima situação →";
   $("feedback").style.display = "block";
   $("feedback").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
 function proxima(){
-  indice++;
-  if(indice < QUESTOES.length){ render(); }
+  indiceAtual++;
+  if(indiceAtual < QUESTOES.length){ render(); }
   else { resultado(); }
 }
 
 function resultado(){
   $("tela-pergunta").classList.add("oculto");
   $("tela-resultado").classList.remove("oculto");
-  $("total-final").textContent = total;
-
-  const p = PERFIS.find(p => total >= p.min);
+  const pct = pctParcial();
+  $("indice-final").textContent = pct + "%";
+  $("marcador").style.left = "calc(" + pct + "% - 2px)";
+  const p = PERFIS.find(p => pct >= p.min);
   $("perfil").innerHTML = "<h3>"+p.nome+"</h3><p>"+p.desc+"</p>";
-
-  const corpo = $("recap-corpo");
-  corpo.innerHTML = "";
+  const cores = {1:"#2e7d4f", 0.5:"#2f6da8", 0.25:"#c07f18", 0:"#b3452e"};
+  const box = $("linhas-situacoes");
+  box.innerHTML = "";
   historico.forEach(h=>{
-    const cores = {4:"#2e7d4f",2:"#2f6da8",1:"#c07f18",0:"#b3452e"};
-    const tr = document.createElement("tr");
-    tr.innerHTML = "<td><strong>"+h.titulo+"</strong><br><span style='font-size:.78rem;color:#8a7a55'>"+h.cat+"</span></td>"+
-                   "<td>"+h.escolha+"</td>"+
-                   "<td class='pt' style='color:"+cores[h.anos]+"'>+"+h.anos+"</td>";
-    corpo.appendChild(tr);
+    const g = GRAV[h.grav];
+    const div = document.createElement("div");
+    div.className = "linha-sit";
+    div.innerHTML = "<div style='flex:1'><strong>"+h.titulo+"</strong><br>"+
+      "<span style='font-size:.7rem;color:"+g.cor+";font-family:Verdana,Arial,sans-serif;font-weight:bold'>"+g.selo+"</span></div>"+
+      "<div class='barra-q'><div style='width:"+(h.qual*100)+"%;background:"+cores[h.qual]+"'></div></div>"+
+      "<div style='width:44px;text-align:right;font-weight:bold;color:"+cores[h.qual]+"'>"+(h.qual*100)+"%</div>";
+    box.appendChild(div);
   });
+  const n = QUESTOES.length;
+  $("cobertura").innerHTML =
+    "<strong>Cobertura desta amostra:</strong> "+n+" das "+N_DIDATICO+" situações do diagnóstico didático completo."+
+    "<div class='trilho'><div style='width:"+(100*n/N_DIDATICO)+"%'></div></div>"+
+    "Uma carreira de 35 anos no chão de fábrica apresenta cerca de <strong>"+N_CARREIRA+" situações significativas</strong> — 2 a 3 por ano, mais raras porém proporcionalmente mais graves à medida que se sobe na hierarquia.<br><br>"+
+    "<em>⚠ Nenhuma conclusão definitiva sobre sua preparação é possível com "+n+" situações — e este é exatamente o ponto: a vida real não avisa quais virão.</em>";
   window.scrollTo({top:0, behavior:"smooth"});
 }
 
