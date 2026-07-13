@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Engenheiro e a Sombra — Carl Jung</title>
+<style>
+  :root{
+    --ink:#1c2130;
+    --ink2:#2a3145;
+    --paper:#f7f2e8;
+    --paper2:#efe6d4;
+    --gold:#c9971c;
+    --gold-dark:#9a7210;
+    --verde:#2e7d4f;
+    --azul:#2f6da8;
+    --ambar:#c07f18;
+    --verm:#b3452e;
+    --cinza:#6b7280;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:linear-gradient(160deg,#161a26 0%,#232a3d 60%,#1c2130 100%);
+    color:var(--paper);
+    min-height:100vh;
+    padding:24px 12px 60px;
+  }
+  .container{max-width:860px;margin:0 auto;}
+  header{text-align:center;margin-bottom:22px;}
+  header h1{
+    font-size:1.7rem;letter-spacing:.5px;color:var(--paper);
+  }
+  header h1 span{color:var(--gold);}
+  header p.sub{
+    font-style:italic;color:#cbb87f;margin-top:6px;font-size:.98rem;
+  }
+  .cartao{
+    background:var(--paper);color:var(--ink);
+    border-radius:14px;padding:26px 28px;
+    box-shadow:0 10px 30px rgba(0,0,0,.45);
+    border:1px solid #d8caa8;
+  }
+  .cartao h2{font-size:1.25rem;margin-bottom:12px;color:var(--ink);}
+  .cartao p{line-height:1.55;margin-bottom:12px;}
+  .selo{
+    display:inline-block;background:var(--ink);color:var(--gold);
+    font-size:.75rem;letter-spacing:1.2px;text-transform:uppercase;
+    padding:5px 12px;border-radius:20px;margin-bottom:14px;
+    font-family:Verdana,Arial,sans-serif;
+  }
+  .mapa{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 20px;
+  }
+  @media(max-width:640px){.mapa{grid-template-columns:1fr;}}
+  .mapa .bloco{
+    background:var(--paper2);border:1px solid #d9c9a3;border-radius:10px;padding:14px 16px;
+  }
+  .mapa .bloco h3{
+    font-size:.85rem;text-transform:uppercase;letter-spacing:1px;
+    color:var(--gold-dark);margin-bottom:8px;font-family:Verdana,Arial,sans-serif;
+  }
+  .mapa .bloco ul{list-style:none;}
+  .mapa .bloco li{
+    padding:4px 0;border-bottom:1px dashed #d3c39c;font-size:.95rem;
+  }
+  .mapa .bloco li:last-child{border-bottom:none;}
+  .regras{
+    background:#fdf9ef;border-left:4px solid var(--gold);
+    padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;
+    font-size:.95rem;line-height:1.55;
+  }
+  button.principal{
+    display:block;width:100%;
+    background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+    color:#fff;border:none;border-radius:10px;
+    padding:15px 20px;font-size:1.05rem;font-family:Georgia,serif;
+    cursor:pointer;letter-spacing:.5px;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    transition:transform .12s ease;
+  }
+  button.principal:hover{transform:translateY(-2px);}
+  .barra-topo{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:12px;font-family:Verdana,Arial,sans-serif;font-size:.8rem;
+    color:#cbb87f;
+  }
+  .progresso{
+    height:8px;background:#3a4258;border-radius:6px;overflow:hidden;margin-bottom:20px;
+  }
+  .progresso div{
+    height:100%;background:linear-gradient(90deg,var(--gold),#e8c25a);
+    width:0%;transition:width .4s ease;border-radius:6px;
+  }
+  .categoria{
+    display:inline-block;background:var(--ink);color:#e8c25a;
+    font-size:.72rem;letter-spacing:1.2px;text-transform:uppercase;
+    padding:4px 12px;border-radius:16px;margin-bottom:12px;
+    font-family:Verdana,Arial,sans-serif;
+  }
+  .situacao{
+    font-size:1.02rem;line-height:1.6;margin-bottom:20px;
+  }
+  .alt{
+    display:block;width:100%;text-align:left;
+    background:#fdfaf3;border:1.5px solid #d9c9a3;border-radius:10px;
+    padding:13px 16px;margin-bottom:10px;font-size:.97rem;line-height:1.45;
+    font-family:Georgia,serif;color:var(--ink);cursor:pointer;
+    transition:border-color .15s,background .15s,transform .1s;
+  }
+  .alt:hover{border-color:var(--gold);background:#fbf3dd;transform:translateX(3px);}
+  .alt .letra{
+    display:inline-block;font-weight:bold;color:var(--gold-dark);margin-right:8px;
+  }
+  .alt:disabled{cursor:default;opacity:.55;transform:none;}
+  .alt.escolhida{opacity:1;border-width:2.5px;}
+  .alt.escolhida.n4{border-color:var(--verde);background:#e9f5ee;}
+  .alt.escolhida.n2{border-color:var(--azul);background:#eaf2fa;}
+  .alt.escolhida.n1{border-color:var(--ambar);background:#faf3e3;}
+  .alt.escolhida.n0{border-color:var(--verm);background:#faecec;}
+  .feedback{display:none;margin-top:18px;animation:surge .35s ease;}
+  @keyframes surge{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .veredito{
+    font-family:Verdana,Arial,sans-serif;font-size:.8rem;letter-spacing:1px;
+    text-transform:uppercase;padding:6px 14px;border-radius:16px;
+    display:inline-block;color:#fff;margin-bottom:12px;
+  }
+  .veredito.n4{background:var(--verde);}
+  .veredito.n2{background:var(--azul);}
+  .veredito.n1{background:var(--ambar);}
+  .veredito.n0{background:var(--verm);}
+  .consequencia{
+    background:#fdf9ef;border:1px solid #e2d5b2;border-radius:10px;
+    padding:15px 17px;line-height:1.6;font-size:.97rem;margin-bottom:14px;
+  }
+  .consequencia strong{color:var(--ink);}
+  .maquiavel{
+    background:var(--ink);color:#efe3c0;border-radius:10px;
+    padding:16px 18px;line-height:1.6;font-size:.95rem;
+    border-left:5px solid var(--gold);margin-bottom:16px;
+  }
+  .maquiavel .autor{
+    display:block;margin-top:8px;font-style:italic;color:var(--gold);
+    font-size:.85rem;text-align:right;
+  }
+  .anos-chip{
+    font-family:Verdana,Arial,sans-serif;font-size:.9rem;
+    background:#fbf3dd;border:1px solid var(--gold);color:var(--gold-dark);
+    padding:8px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;
+    font-weight:bold;
+  }
+  .placar-final{
+    text-align:center;padding:10px 0 4px;
+  }
+  .placar-final .numero{
+    font-size:3.4rem;color:var(--gold-dark);font-weight:bold;line-height:1;
+  }
+  .placar-final .rotulo{
+    font-family:Verdana,Arial,sans-serif;font-size:.8rem;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--cinza);margin-top:4px;
+  }
+  .perfil{
+    background:var(--paper2);border:1px solid #d9c9a3;border-radius:10px;
+    padding:18px 20px;margin:18px 0;line-height:1.6;
+  }
+  .perfil h3{color:var(--gold-dark);margin-bottom:8px;font-size:1.15rem;}
+  table.recap{
+    width:100%;border-collapse:collapse;font-size:.88rem;margin:14px 0 20px;
+  }
+  table.recap th{
+    text-align:left;padding:8px 10px;background:var(--ink);color:#e8c25a;
+    font-family:Verdana,Arial,sans-serif;font-size:.72rem;letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  table.recap td{
+    padding:8px 10px;border-bottom:1px solid #e0d3b3;line-height:1.4;
+  }
+  table.recap td.pt{text-align:center;font-weight:bold;white-space:nowrap;}
+  .oculto{display:none;}
+  footer{
+    text-align:center;margin-top:26px;color:#8b93a8;font-size:.8rem;
+    font-style:italic;
+  }
+
+  .alerta{background:#fbeeea;border-left:4px solid #b3452e;padding:14px 16px;
+    border-radius:0 8px 8px 0;margin-bottom:16px;font-size:.93rem;line-height:1.55;}
+  .alerta h3{color:#8f3423;font-size:.82rem;margin-bottom:6px;
+    font-family:Verdana,Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;}
+  .gravidade{display:block;font-family:Verdana,Arial,sans-serif;font-size:.72rem;
+    letter-spacing:.8px;margin:0 0 14px;font-weight:bold;}
+  .medidor{position:relative;height:26px;border-radius:8px;overflow:hidden;display:flex;margin-top:14px;}
+  .medidor div{height:100%;}
+  .marcador{position:absolute;top:10px;width:4px;height:34px;background:#1c2130;border-radius:2px;}
+  .zonas{display:flex;font-family:Verdana,Arial,sans-serif;font-size:.6rem;color:#6b7280;
+    margin:4px 0 14px;letter-spacing:.5px;}
+  .linha-sit{display:flex;align-items:center;gap:10px;padding:9px 0;
+    border-bottom:1px solid #e0d3b3;font-size:.9rem;}
+  .linha-sit .barra-q{flex:0 0 90px;height:12px;background:#eee3cb;border-radius:6px;overflow:hidden;}
+  .linha-sit .barra-q div{height:100%;}
+  .cobertura{background:#fdf9ef;border:1px solid #e2d5b2;border-radius:10px;
+    padding:14px 16px;margin:16px 0;font-size:.92rem;line-height:1.55;}
+  .cobertura .trilho{height:14px;background:#eee3cb;border-radius:7px;overflow:hidden;margin:8px 0;}
+  .cobertura .trilho div{height:100%;background:linear-gradient(90deg,var(--gold),#e8c25a);}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>O Engenheiro e <span>a Sombra</span></h1>
+    <p class="sub">As 3 situações da demonstração, avaliadas segundo Carl Gustav Jung (1875–1961)</p>
+  </header>
+
+  <!-- ==================== TELA INICIAL ==================== -->
+  <div id="tela-inicio" class="cartao">
+    <span class="selo">Versão Carl Jung · 3 situações</span>
+    <h2>Ganhe anos de experiência sem pagar o preço dos erros</h2>
+    <p>Ao longo da carreira, o engenheiro brasileiro enfrenta conflitos que nenhuma disciplina do curso prepara: disputas com pares, pressões de diretores, negociações com sindicatos, assédio de políticos, promessas de consultores e a fragilidade dos terceirizados. Esta é a <strong>versão Carl Jung</strong>: as mesmas 3 situações da demonstração, agora avaliadas pela <em>psicologia profunda</em> — persona, sombra, projeção e individuação. Aqui a pergunta não é só ‘o que fazer?’, mas ‘que parte de mim está decidindo?’. O mapa completo de relações do simulador:</p>
+
+    <div class="mapa">
+      <div class="bloco">
+        <h3>⬛ Dentro da empresa</h3>
+        <ul>
+          <li>Equipe e subordinados</li>
+          <li>Engenheiros pares (colegas)</li>
+          <li>Chefia imediata</li>
+          <li>Diretoria</li>
+          <li>Presidência e Conselho</li>
+        </ul>
+      </div>
+      <div class="bloco">
+        <h3>⬜ Fora da empresa</h3>
+        <ul>
+          <li>Sindicatos</li>
+          <li>Políticos e poder público</li>
+          <li>Consultores e palestrantes</li>
+          <li>Empresas terceirizadas</li>
+          <li>A crise que ninguém avisou</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alerta">
+      <h3>⚠ Ponto de atenção antes de começar</h3>
+      <p>No chão de fábrica real, escolhas como as que você fará aqui já custaram a engenheiros de verdade: <strong>o emprego</strong>; <strong>a vida e a integridade física</strong>, em acidentes; <strong>a saúde física e mental</strong>; <strong>conflitos pessoais graves</strong>; <strong>grandes prejuízos à empresa e a terceiros</strong>; e até <strong>processos judiciais e prisão</strong>. Uma carreira de 35 anos apresenta cerca de <strong>105 situações significativas</strong> — 2 a 3 por ano, mais raras porém proporcionalmente mais graves à medida que se sobe na hierarquia. Trate cada escolha como se fosse real.</p>
+    </div>
+    <div class="regras">
+      <strong>Regras do jogo:</strong> em cada situação, escolha entre 5 atitudes possíveis a que você tomaria de verdade. Cada escolha revela a <strong>consequência</strong> — para você e para quem está ao seu lado — e a lição de <strong>Carl Gustav Jung</strong> (1875–1961), psiquiatra suíço, criador dos conceitos de persona, sombra e individuação. Cada situação traz um <strong>selo de gravidade</strong> — algumas custam reputação; outras, a liberdade ou vidas, e pesam dobrado. Ao final, você recebe seu <strong>índice de prudência relacional</strong> com referência visual e a medida honesta do quanto esta amostra cobre de uma carreira.
+    </div>
+
+    <button class="principal" onclick="iniciar()">⚜ Começar</button>
+  </div>
+
+  <!-- ==================== TELA DA PERGUNTA ==================== -->
+  <div id="tela-pergunta" class="cartao oculto">
+    <div class="barra-topo" style="color:var(--cinza)">
+      <span id="contador"></span>
+      <span id="placar-parcial"></span>
+    </div>
+    <div class="progresso"><div id="barra"></div></div>
+    <span class="categoria" id="cat"></span>
+    <span class="gravidade" id="grav"></span>
+    <h2 id="titulo"></h2>
+    <p class="situacao" id="situacao"></p>
+    <div id="alternativas"></div>
+
+    <div class="feedback" id="feedback">
+      <span class="veredito" id="veredito"></span>
+      <div class="consequencia" id="consequencia"></div>
+      <div class="maquiavel">
+        <span id="citacao"></span>
+        <span class="autor" id="fonte"></span>
+      </div>
+      <span class="anos-chip" id="anos-chip"></span>
+      <button class="principal" id="btn-proxima" onclick="proxima()">Próxima situação →</button>
+    </div>
+  </div>
+
+  <!-- ==================== TELA DE RESULTADO ==================== -->
+  <div id="tela-resultado" class="cartao oculto">
+    <span class="selo">Resultado — Versão Carl Jung</span>
+    <div class="placar-final">
+      <div class="numero" id="indice-final"></div>
+      <div class="rotulo">índice de prudência relacional nesta amostra</div>
+    </div>
+    <div style="position:relative">
+      <div class="medidor">
+        <div style="width:40%;background:#d8836f"></div>
+        <div style="width:30%;background:#e5b566"></div>
+        <div style="width:20%;background:#7fb894"></div>
+        <div style="width:10%;background:#3f8f63"></div>
+      </div>
+      <div class="marcador" id="marcador"></div>
+    </div>
+    <div class="zonas">
+      <span style="width:40%">VULNERÁVEL</span><span style="width:30%">ATENÇÃO</span><span style="width:20%">PRUDENTE</span><span style="width:10%">ESTADISTA</span>
+    </div>
+    <div class="perfil" id="perfil"></div>
+    <h2 style="font-size:1.05rem">Por situação</h2>
+    <div id="linhas-situacoes"></div>
+    <div class="cobertura" id="cobertura"></div>
+    <button class="principal" onclick="reiniciar()">⟲ Refazer a demonstração</button>
+  </div>
+
+  <footer>“Conheça todas as teorias, domine todas as técnicas — mas, ao tocar uma alma humana, seja apenas outra alma humana.” — atribuído a Jung</footer>
+</div>
+
+<script>
+/* ============================================================
+   BANCO DE SITUAÇÕES
+   anos: 4 = prudente | 2 = razoável | 1 = arriscada | 0 = desastrosa
+   ============================================================ */
+const QUESTOES = [
+{
+cat:"Engenheiros pares",
+ titulo:"A ideia roubada no café",
+ grav:"moderada",
+ situacao:"Em reunião com o diretor, um engenheiro do seu mesmo nível apresenta como dele a solução técnica que você desenvolveu e comentou informalmente com ele no café, na semana anterior. O diretor está impressionado e elogia o 'autor' na frente de todos.",
+ citacao:"Tudo o que nos irrita nos outros pode levar-nos a uma compreensão de nós mesmos.",
+ fonte:"Carl Jung, Memórias, Sonhos, Reflexões",
+ alts:[
+  {t:"Interromper na hora e desmascará-lo: 'essa ideia é minha, contei a você no café'.", anos:1,
+   cons:"<strong>Consequência:</strong> vira um bate-boca sem provas. O diretor não lembra de quem era a ideia — lembra que vocês dois brigaram na reunião dele. A autoria se perde; a fama de encrenqueiro fica com você.<br><br><strong>🔍 Leitura de Jung:</strong> Possessão pelo afeto: a sombra tomou o volante e você assistiu do banco de trás. O colega apenas apertou um botão que já existia em você — a pergunta junguiana é: que ferida ele encontrou pronta?"},
+  {t:"Ficar quieto para não criar clima ruim; o que importa é a empresa ganhar com a solução.", anos:0,
+   cons:"<strong>Consequência:</strong> o padrão se repete. Em um ano, você virou o fornecedor invisível de ideias do departamento — ele virou gerente. Quem está ao seu lado aprende a mesma lição: com você, pode.<br><br><strong>🔍 Leitura de Jung:</strong> A persona do ‘bom colega’ sufocou a sua legítima autoafirmação. O que não é dito não desaparece: desce ao inconsciente e volta como ressentimento, cinismo ou doença — sempre com juros."},
+  {t:"Ainda na reunião, complementar a apresentação com os detalhes que só o autor domina — memorial de cálculo, premissas, riscos — e se oferecer para conduzir o detalhamento.", anos:4,
+   cons:"<strong>Consequência:</strong> em cinco minutos fica evidente para todos quem realmente concebeu a solução, sem que você tenha acusado ninguém. O diretor pede que <em>você</em> lidere o projeto. A raposa venceu sem rugir.<br><br><strong>🔍 Leitura de Jung:</strong> Resposta individuada: nem a persona submissa que engole, nem a sombra explosiva que agride — o Self, que simplesmente <em>mostra a obra</em>. Você sustentou a tensão entre calar e explodir até emergir o terceiro caminho, que Jung chamava de função transcendente."},
+  {t:"Depois da reunião, conversar em particular com o colega, estabelecer o limite — e passar a registrar suas ideias por e-mail antes de qualquer conversa informal.", anos:2,
+   cons:"<strong>Consequência:</strong> o crédito desta vez se perdeu, mas o colega entende que foi percebido e recua. Seus registros escritos o protegem dali em diante. Solução digna — apenas um pouco tardia.<br><br><strong>🔍 Leitura de Jung:</strong> Confrontação consciente: você nomeou o fato sem transformar o colega num monstro (isso seria projeção) e integrou a lição no seu modo de trabalhar. É assim que a experiência vira consciência."},
+  {t:"Espalhar entre os colegas que ele é um ladrão de ideias, para que todos se protejam dele.", anos:0,
+   cons:"<strong>Consequência:</strong> a fofoca chega a ele — e ao diretor — com o seu nome. Agora a disputa é pública e você aparece como ressentido. Quem espalha veneno acaba identificado como a fonte.<br><br><strong>🔍 Leitura de Jung:</strong> Projeção pura: fazer do outro ‘o ladrão’ em praça pública para não olhar a própria ferida — a de ter entregado a ideia sem proteção. O que negamos em nós, perseguimos nos outros."}
+ ]
+},
+{
+cat:"Diretoria",
+ titulo:"A assinatura sob pressão",
+ grav:"maxima",
+ situacao:"O diretor pressiona você a assinar a liberação de um equipamento com pendências de segurança, para cumprir o prazo prometido ao cliente: 'depois a gente regulariza, todo mundo faz assim'. A ART é sua. O prazo é amanhã.",
+ citacao:"Quem olha para fora, sonha; quem olha para dentro, desperta.",
+ fonte:"Carl Jung, Cartas",
+ alts:[
+  {t:"Assinar. Contrariar diretor é suicídio profissional, e provavelmente não vai dar nada.", anos:0,
+   cons:"<strong>Consequência:</strong> se nada acontecer, o diretor aprendeu que pode sempre te dobrar. Se acontecer, a responsabilidade técnica e criminal é <em>sua</em> — o diretor negará a conversa, e sua família pagará junto. Não existe 'assinatura meio comprometida'.<br><br><strong>🔍 Leitura de Jung:</strong> Dissolução no coletivo: ‘todo mundo faz assim’ é a voz da massa, não a sua. Jung viu de perto o que massas fazem com consciências individuais — e trair o Self deixa cicatriz que a psique cobra depois, em sintomas, insônia e amargura."},
+  {t:"Recusar em alto e bom som, dizendo na frente de todos que isso é crime e que ele responderá por assédio.", anos:1,
+   cons:"<strong>Consequência:</strong> você está certo no conteúdo e errado na forma. O diretor, humilhado, passa a te fritar em tudo. A empresa não te demite por isso — apenas te esquece. Guerra declarada sem aliados é derrota anunciada.<br><br><strong>🔍 Leitura de Jung:</strong> Inflação pelo arquétipo do herói-mártir: o gesto grandioso era sobre a sua imagem, não sobre a segurança. Quando o ego veste a capa do arquétipo, a queda vem junto."},
+  {t:"Recusar por escrito, com fundamento técnico — e apresentar no mesmo documento um plano de liberação parcial/faseada que preserve o prazo comercial nas partes seguras.", anos:4,
+   cons:"<strong>Consequência:</strong> o diretor não ganhou a assinatura, mas ganhou uma saída para o cliente — e você, blindagem documental. A recusa sem alternativa é confronto; a recusa com alternativa é engenharia. Seu nome sobe na lista dos que resolvem.<br><br><strong>🔍 Leitura de Jung:</strong> O teste moral da individuação: você sustentou a tensão dos opostos — prazo contra segurança — sem colapsar para nenhum lado, até nascer o terceiro elemento: a liberação faseada. Isso é a função transcendente operando em plena sala de reunião."},
+  {t:"Acionar formalmente a área de segurança do trabalho/qualidade para uma avaliação conjunta antes de qualquer assinatura.", anos:2,
+   cons:"<strong>Consequência:</strong> você dividiu o peso da decisão com quem tem mandato para isso — movimento legítimo. Perde alguma autonomia e o diretor nota a manobra, mas ninguém pode puni-lo por seguir o rito. Defesa sólida, ainda que sem o brilho de quem trouxe a solução.<br><br><strong>🔍 Leitura de Jung:</strong> Buscar o círculo consciente da organização em vez de carregar sozinho: saúde psíquica também é saber que indivíduo nenhum precisa conter, sozinho, a sombra de uma empresa inteira."},
+  {t:"Assinar, mas guardar e-mails e gravações provando que foi pressionado.", anos:0,
+   cons:"<strong>Consequência:</strong> as provas mostram que você <em>sabia</em> do risco e assinou mesmo assim — elas condenam você primeiro. Perante o conselho de ética e a Justiça, a pressão não transfere a responsabilidade de quem detém a prerrogativa técnica.<br><br><strong>🔍 Leitura de Jung:</strong> Dissociação: a mão assina, a consciência arquiva provas. Mas a psique não aceita contabilidade dupla — a parte de você que sabia cobrará da parte que assinou."}
+ ]
+},
+{
+cat:"A crise",
+ titulo:"Madrugada de sexta-feira",
+ grav:"maxima",
+ situacao:"Duas da manhã: falha grave na planta, princípio de incêndio controlado, um terceirizado hospitalizado em observação. A imprensa local já ligou na portaria. O diretor, em pânico, telefona: 'Resolve isso AGORA'. Todos os olhos — equipe, empresa, cidade — se voltam para você.",
+ citacao:"Aquilo que não se torna consciente retorna sobre nós como destino.",
+ fonte:"Carl Jung, Aion (síntese)",
+ alts:[
+  {t:"Aguardar instruções detalhadas da diretoria antes de qualquer movimento: em crise, quem age sem ordem paga sozinho.", anos:1,
+   cons:"<strong>Consequência:</strong> a diretoria, em pânico, não instrui — cobra. Cada hora de espera amplia o dano e a versão da imprensa se consolida sem a da empresa. Na apuração, a pergunta não será 'quem mandou?', e sim 'quem era o engenheiro responsável e por que não agiu?'.<br><br><strong>🔍 Leitura de Jung:</strong> Regressão ao arquétipo da criança diante do pai: esperar que a ‘diretoria-pai’ diga o que fazer. A crise pedia o adulto — e o adulto é quem age onde está, com o que sabe."},
+  {t:"Executar o plano de emergência ensaiado: pessoas em segurança primeiro, porta-voz único definido, registro escrito de cada decisão com horário, e reporte periódico à diretoria.", anos:4,
+   cons:"<strong>Consequência:</strong> o dique construído na calmaria segura a cheia. O terceirizado recebe atenção total — e a família dele, um interlocutor humano. A imprensa recebe fatos de uma única voz, não versões desencontradas. Semanas depois, a auditoria encontra decisões documentadas e defensáveis. A fortuna bateu; a virtù respondeu.<br><br><strong>🔍 Leitura de Jung:</strong> ‘Aquilo que não se torna consciente retorna como destino’ — e você tornou consciente antes: o plano ensaiado é a crise digerida previamente pela consciência. Na madrugada, você funcionou como o líder-continente que Jung descreveria: aquele que segura o pânico coletivo sem ser contaminado por ele."},
+  {t:"Atender a imprensa imediatamente por telefone, de improviso, para acalmar: 'está tudo sob controle, foi um incidente menor'.", anos:0,
+   cons:"<strong>Consequência:</strong> às 2h você não <em>sabe</em> se está tudo sob controle. Se o quadro do terceirizado piorar, sua frase vira manchete — 'empresa minimizou acidente' — e prova contra a companhia. Em crise, palavra sem fato confirmado é passivo com juros.<br><br><strong>🔍 Leitura de Jung:</strong> Possessão pela persona: falar para <em>parecer</em> no controle em vez de <em>estar</em> no controle. A máscara prometeu o que o homem atrás dela não podia cumprir."},
+  {t:"Começar ainda de madrugada a apurar de quem foi a culpa, para chegar ao amanhecer com um responsável identificado.", anos:0,
+   cons:"<strong>Consequência:</strong> enquanto você caça culpados, ninguém coordena a resposta — e a equipe, vendo a caça às bruxas começar antes do incêndio acabar, passa a esconder informação exatamente quando você mais precisa dela. Culpa se apura depois; vidas e planta se protegem agora.<br><br><strong>🔍 Leitura de Jung:</strong> O bode expiatório é a projeção da sombra coletiva: o grupo sacrifica um para não olhar para si. Ao liderar a caça, você virou instrumento do mecanismo mais primitivo da psique grupal — no pior momento possível."},
+  {t:"Assumir pessoalmente a contenção técnica e deixar comunicação, família e diretoria para quando o problema físico estiver resolvido.", anos:2,
+   cons:"<strong>Consequência:</strong> a contenção funciona — seu terreno é esse. Mas o silêncio de quatro horas custa caro: a imprensa publica a versão que tinha, a família do terceirizado sabe do acidente pelo rádio, e o diretor, sem notícias, toma decisões erradas por conta própria. Crise tem duas frentes: a física e a narrativa. Você venceu uma.<br><br><strong>🔍 Leitura de Jung:</strong> Unilateralidade: a função pensamento hipertrofiada resolveu a física, enquanto a função sentimento — a família do ferido, o medo da equipe, a cidade — ficou órfã. Jung insistia: a totalidade exige as duas."}
+ ]
+}
+];
+
+/* ============================================================
+   PERFIS FINAIS
+   ============================================================ */
+const PERFIS = [
+ {min:70, nome:"🌕 Individuação em Curso", desc:"Você sustenta a tensão dos opostos sem colapsar: não obedece à persona, não é arrastado pela sombra, não se dissolve no coletivo. Das suas escolhas emergiu repetidamente o ‘terceiro caminho’ — a marca da função transcendente. Jung diria que você está fazendo, no escritório, o trabalho que a maioria evita a vida inteira."},
+ {min:40, nome:"🌗 A Persona Ainda Decide às Vezes", desc:"Em parte das situações quem respondeu foi você; em outras, a máscara (agradar, parecer forte) ou a sombra (a raiva, o medo). Releia as escolhas perdidas com a pergunta junguiana: ‘que parte de mim estava decidindo ali?’ Nomear a parte já é metade da integração."},
+ {min:0, nome:"🌑 Possessão pela Sombra", desc:"O inconsciente decidiu e você assinou: raiva projetada, submissão ao coletivo, máscara prometendo o que o homem não podia cumprir. Nada disso é defeito moral — é material de trabalho. Refaça o quiz observando o que cada situação desperta em você <em>antes</em> de escolher: é aí que a consciência começa."}
+];
+
+/* ============================================================
+   MOTOR DO QUIZ
+   ============================================================ */
+const GRAV = {
+ maxima:{peso:2, selo:"⛔ GRAVIDADE MÁXIMA", desc:"pode custar vidas, a liberdade e o registro profissional", cor:"#b3452e"},
+ alta:{peso:1.5, selo:"⚠ GRAVIDADE ALTA", desc:"pode custar o emprego, a saúde e anos de carreira", cor:"#c07f18"},
+ moderada:{peso:1, selo:"● GRAVIDADE MODERADA", desc:"pode custar promoções, relações e reputação", cor:"#2f6da8"}
+};
+const N_DIDATICO = 40, N_CARREIRA = 105;
+let indiceAtual = 0, historico = [];
+const LETRAS = ["a","b","c","d","e"];
+const $ = id => document.getElementById(id);
+
+function embaralhar(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+let ORDEM = [];
+function prepararRodada(){ ORDEM = QUESTOES.map(q => embaralhar(q.alts)); }
+
+function pctParcial(){
+  if(!historico.length) return null;
+  let s=0, w=0;
+  historico.forEach(h=>{ s += h.qual * GRAV[h.grav].peso; w += GRAV[h.grav].peso; });
+  return Math.round(100*s/w);
+}
+
+function iniciar(){
+  indiceAtual = 0; historico = [];
+  prepararRodada();
+  $("tela-inicio").classList.add("oculto");
+  $("tela-resultado").classList.add("oculto");
+  $("tela-pergunta").classList.remove("oculto");
+  render();
+}
+
+function render(){
+  const q = QUESTOES[indiceAtual];
+  $("contador").textContent = "Situação " + (indiceAtual+1) + " de " + QUESTOES.length;
+  const p = pctParcial();
+  $("placar-parcial").textContent = p===null ? "" : "Prudência parcial: " + p + "%";
+  $("barra").style.width = (indiceAtual/QUESTOES.length*100) + "%";
+  $("cat").textContent = q.cat;
+  const g = GRAV[q.grav];
+  $("grav").textContent = g.selo + " — " + g.desc;
+  $("grav").style.color = g.cor;
+  $("titulo").textContent = q.titulo;
+  $("situacao").textContent = q.situacao;
+  $("feedback").style.display = "none";
+  const box = $("alternativas");
+  box.innerHTML = "";
+  ORDEM[indiceAtual].forEach((alt,i)=>{
+    const b = document.createElement("button");
+    b.className = "alt";
+    b.innerHTML = '<span class="letra">'+LETRAS[i]+')</span>'+alt.t;
+    b.onclick = ()=>responder(b, alt, q);
+    box.appendChild(b);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function responder(botao, alt, q){
+  document.querySelectorAll(".alt").forEach(b=>b.disabled=true);
+  botao.classList.add("escolhida","n"+alt.anos);
+  const qual = alt.anos/4;
+  historico.push({titulo:q.titulo, cat:q.cat, grav:q.grav, escolha:alt.t, qual:qual});
+  const rotulos = {4:"Escolha prudente", 2:"Escolha razoável", 1:"Escolha arriscada", 0:"Escolha desastrosa"};
+  const v = $("veredito");
+  v.textContent = rotulos[alt.anos];
+  v.className = "veredito n"+alt.anos;
+  $("consequencia").innerHTML = alt.cons;
+  $("citacao").textContent = "“" + q.citacao + "”";
+  $("fonte").textContent = "— " + q.fonte;
+  const custo = {maxima:"vidas, a liberdade e a carreira", alta:"o emprego e a saúde", moderada:"anos de relações e reputação"}[q.grav];
+  const chips = {
+    4:"✔ Lição antecipada por completo — de graça",
+    2:"◐ Lição antecipada pela metade",
+    1:"▲ Escolha arriscada — na vida real, esta lição viria com custo",
+    0:"✘ Na vida real, esta escolha poderia custar " + custo
+  };
+  $("anos-chip").textContent = chips[alt.anos];
+  $("placar-parcial").textContent = "Prudência parcial: " + pctParcial() + "%";
+  $("btn-proxima").textContent = (indiceAtual === QUESTOES.length-1) ? "Ver meu diagnóstico →" : "Próxima situação →";
+  $("feedback").style.display = "block";
+  $("feedback").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function proxima(){
+  indiceAtual++;
+  if(indiceAtual < QUESTOES.length){ render(); }
+  else { resultado(); }
+}
+
+function resultado(){
+  $("tela-pergunta").classList.add("oculto");
+  $("tela-resultado").classList.remove("oculto");
+  const pct = pctParcial();
+  $("indice-final").textContent = pct + "%";
+  $("marcador").style.left = "calc(" + pct + "% - 2px)";
+  const p = PERFIS.find(p => pct >= p.min);
+  $("perfil").innerHTML = "<h3>"+p.nome+"</h3><p>"+p.desc+"</p>";
+  const cores = {1:"#2e7d4f", 0.5:"#2f6da8", 0.25:"#c07f18", 0:"#b3452e"};
+  const box = $("linhas-situacoes");
+  box.innerHTML = "";
+  historico.forEach(h=>{
+    const g = GRAV[h.grav];
+    const div = document.createElement("div");
+    div.className = "linha-sit";
+    div.innerHTML = "<div style='flex:1'><strong>"+h.titulo+"</strong><br>"+
+      "<span style='font-size:.7rem;color:"+g.cor+";font-family:Verdana,Arial,sans-serif;font-weight:bold'>"+g.selo+"</span></div>"+
+      "<div class='barra-q'><div style='width:"+(h.qual*100)+"%;background:"+cores[h.qual]+"'></div></div>"+
+      "<div style='width:44px;text-align:right;font-weight:bold;color:"+cores[h.qual]+"'>"+(h.qual*100)+"%</div>";
+    box.appendChild(div);
+  });
+  const n = QUESTOES.length;
+  $("cobertura").innerHTML =
+    "<strong>Cobertura desta amostra:</strong> "+n+" das "+N_DIDATICO+" situações do diagnóstico didático completo."+
+    "<div class='trilho'><div style='width:"+(100*n/N_DIDATICO)+"%'></div></div>"+
+    "Uma carreira de 35 anos no chão de fábrica apresenta cerca de <strong>"+N_CARREIRA+" situações significativas</strong> — 2 a 3 por ano, mais raras porém proporcionalmente mais graves à medida que se sobe na hierarquia.<br><br>"+
+    "<em>⚠ Nenhuma conclusão definitiva sobre sua preparação é possível com "+n+" situações — e este é exatamente o ponto: a vida real não avisa quais virão.</em>";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function reiniciar(){ iniciar(); }
+</script>
+</body>
+</html>
