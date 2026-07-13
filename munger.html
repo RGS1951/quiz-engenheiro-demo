@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Engenheiro e os Erros de Julgamento — Charlie Munger</title>
+<style>
+  :root{
+    --ink:#1c2130;
+    --ink2:#2a3145;
+    --paper:#f7f2e8;
+    --paper2:#efe6d4;
+    --gold:#c9971c;
+    --gold-dark:#9a7210;
+    --verde:#2e7d4f;
+    --azul:#2f6da8;
+    --ambar:#c07f18;
+    --verm:#b3452e;
+    --cinza:#6b7280;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:linear-gradient(160deg,#161a26 0%,#232a3d 60%,#1c2130 100%);
+    color:var(--paper);
+    min-height:100vh;
+    padding:24px 12px 60px;
+  }
+  .container{max-width:860px;margin:0 auto;}
+  header{text-align:center;margin-bottom:22px;}
+  header h1{
+    font-size:1.7rem;letter-spacing:.5px;color:var(--paper);
+  }
+  header h1 span{color:var(--gold);}
+  header p.sub{
+    font-style:italic;color:#cbb87f;margin-top:6px;font-size:.98rem;
+  }
+  .cartao{
+    background:var(--paper);color:var(--ink);
+    border-radius:14px;padding:26px 28px;
+    box-shadow:0 10px 30px rgba(0,0,0,.45);
+    border:1px solid #d8caa8;
+  }
+  .cartao h2{font-size:1.25rem;margin-bottom:12px;color:var(--ink);}
+  .cartao p{line-height:1.55;margin-bottom:12px;}
+  .selo{
+    display:inline-block;background:var(--ink);color:var(--gold);
+    font-size:.75rem;letter-spacing:1.2px;text-transform:uppercase;
+    padding:5px 12px;border-radius:20px;margin-bottom:14px;
+    font-family:Verdana,Arial,sans-serif;
+  }
+  .mapa{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0 20px;
+  }
+  @media(max-width:640px){.mapa{grid-template-columns:1fr;}}
+  .mapa .bloco{
+    background:var(--paper2);border:1px solid #d9c9a3;border-radius:10px;padding:14px 16px;
+  }
+  .mapa .bloco h3{
+    font-size:.85rem;text-transform:uppercase;letter-spacing:1px;
+    color:var(--gold-dark);margin-bottom:8px;font-family:Verdana,Arial,sans-serif;
+  }
+  .mapa .bloco ul{list-style:none;}
+  .mapa .bloco li{
+    padding:4px 0;border-bottom:1px dashed #d3c39c;font-size:.95rem;
+  }
+  .mapa .bloco li:last-child{border-bottom:none;}
+  .regras{
+    background:#fdf9ef;border-left:4px solid var(--gold);
+    padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:20px;
+    font-size:.95rem;line-height:1.55;
+  }
+  button.principal{
+    display:block;width:100%;
+    background:linear-gradient(180deg,var(--gold),var(--gold-dark));
+    color:#fff;border:none;border-radius:10px;
+    padding:15px 20px;font-size:1.05rem;font-family:Georgia,serif;
+    cursor:pointer;letter-spacing:.5px;
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+    transition:transform .12s ease;
+  }
+  button.principal:hover{transform:translateY(-2px);}
+  .barra-topo{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:12px;font-family:Verdana,Arial,sans-serif;font-size:.8rem;
+    color:#cbb87f;
+  }
+  .progresso{
+    height:8px;background:#3a4258;border-radius:6px;overflow:hidden;margin-bottom:20px;
+  }
+  .progresso div{
+    height:100%;background:linear-gradient(90deg,var(--gold),#e8c25a);
+    width:0%;transition:width .4s ease;border-radius:6px;
+  }
+  .categoria{
+    display:inline-block;background:var(--ink);color:#e8c25a;
+    font-size:.72rem;letter-spacing:1.2px;text-transform:uppercase;
+    padding:4px 12px;border-radius:16px;margin-bottom:12px;
+    font-family:Verdana,Arial,sans-serif;
+  }
+  .situacao{
+    font-size:1.02rem;line-height:1.6;margin-bottom:20px;
+  }
+  .alt{
+    display:block;width:100%;text-align:left;
+    background:#fdfaf3;border:1.5px solid #d9c9a3;border-radius:10px;
+    padding:13px 16px;margin-bottom:10px;font-size:.97rem;line-height:1.45;
+    font-family:Georgia,serif;color:var(--ink);cursor:pointer;
+    transition:border-color .15s,background .15s,transform .1s;
+  }
+  .alt:hover{border-color:var(--gold);background:#fbf3dd;transform:translateX(3px);}
+  .alt .letra{
+    display:inline-block;font-weight:bold;color:var(--gold-dark);margin-right:8px;
+  }
+  .alt:disabled{cursor:default;opacity:.55;transform:none;}
+  .alt.escolhida{opacity:1;border-width:2.5px;}
+  .alt.escolhida.n4{border-color:var(--verde);background:#e9f5ee;}
+  .alt.escolhida.n2{border-color:var(--azul);background:#eaf2fa;}
+  .alt.escolhida.n1{border-color:var(--ambar);background:#faf3e3;}
+  .alt.escolhida.n0{border-color:var(--verm);background:#faecec;}
+  .feedback{display:none;margin-top:18px;animation:surge .35s ease;}
+  @keyframes surge{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .veredito{
+    font-family:Verdana,Arial,sans-serif;font-size:.8rem;letter-spacing:1px;
+    text-transform:uppercase;padding:6px 14px;border-radius:16px;
+    display:inline-block;color:#fff;margin-bottom:12px;
+  }
+  .veredito.n4{background:var(--verde);}
+  .veredito.n2{background:var(--azul);}
+  .veredito.n1{background:var(--ambar);}
+  .veredito.n0{background:var(--verm);}
+  .consequencia{
+    background:#fdf9ef;border:1px solid #e2d5b2;border-radius:10px;
+    padding:15px 17px;line-height:1.6;font-size:.97rem;margin-bottom:14px;
+  }
+  .consequencia strong{color:var(--ink);}
+  .maquiavel{
+    background:var(--ink);color:#efe3c0;border-radius:10px;
+    padding:16px 18px;line-height:1.6;font-size:.95rem;
+    border-left:5px solid var(--gold);margin-bottom:16px;
+  }
+  .maquiavel .autor{
+    display:block;margin-top:8px;font-style:italic;color:var(--gold);
+    font-size:.85rem;text-align:right;
+  }
+  .anos-chip{
+    font-family:Verdana,Arial,sans-serif;font-size:.9rem;
+    background:#fbf3dd;border:1px solid var(--gold);color:var(--gold-dark);
+    padding:8px 16px;border-radius:20px;display:inline-block;margin-bottom:16px;
+    font-weight:bold;
+  }
+  .placar-final{
+    text-align:center;padding:10px 0 4px;
+  }
+  .placar-final .numero{
+    font-size:3.4rem;color:var(--gold-dark);font-weight:bold;line-height:1;
+  }
+  .placar-final .rotulo{
+    font-family:Verdana,Arial,sans-serif;font-size:.8rem;letter-spacing:1.5px;
+    text-transform:uppercase;color:var(--cinza);margin-top:4px;
+  }
+  .perfil{
+    background:var(--paper2);border:1px solid #d9c9a3;border-radius:10px;
+    padding:18px 20px;margin:18px 0;line-height:1.6;
+  }
+  .perfil h3{color:var(--gold-dark);margin-bottom:8px;font-size:1.15rem;}
+  table.recap{
+    width:100%;border-collapse:collapse;font-size:.88rem;margin:14px 0 20px;
+  }
+  table.recap th{
+    text-align:left;padding:8px 10px;background:var(--ink);color:#e8c25a;
+    font-family:Verdana,Arial,sans-serif;font-size:.72rem;letter-spacing:1px;
+    text-transform:uppercase;
+  }
+  table.recap td{
+    padding:8px 10px;border-bottom:1px solid #e0d3b3;line-height:1.4;
+  }
+  table.recap td.pt{text-align:center;font-weight:bold;white-space:nowrap;}
+  .oculto{display:none;}
+  footer{
+    text-align:center;margin-top:26px;color:#8b93a8;font-size:.8rem;
+    font-style:italic;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>O Engenheiro e <span>os Erros de Julgamento</span></h1>
+    <p class="sub">As 3 situações da demonstração, avaliadas segundo Charlie Munger (1924–2023)</p>
+  </header>
+
+  <!-- ==================== TELA INICIAL ==================== -->
+  <div id="tela-inicio" class="cartao">
+    <span class="selo">Versão Charlie Munger · 3 situações</span>
+    <h2>Ganhe anos de experiência sem pagar o preço dos erros</h2>
+    <p>Ao longo da carreira, o engenheiro brasileiro enfrenta conflitos que nenhuma disciplina do curso prepara: disputas com pares, pressões de diretores, negociações com sindicatos, assédio de políticos, promessas de consultores e a fragilidade dos terceirizados. Esta é a <strong>versão Charlie Munger</strong>: as mesmas 3 situações da demonstração, agora avaliadas pela <em>Psicologia dos Erros de Julgamento Humano</em> — o catálogo de vieses mentais que fazem pessoas inteligentes tomarem decisões desastrosas achando que estão sendo espertas. O mapa completo de relações do simulador:</p>
+
+    <div class="mapa">
+      <div class="bloco">
+        <h3>⬛ Dentro da empresa</h3>
+        <ul>
+          <li>Equipe e subordinados</li>
+          <li>Engenheiros pares (colegas)</li>
+          <li>Chefia imediata</li>
+          <li>Diretoria</li>
+          <li>Presidência e Conselho</li>
+        </ul>
+      </div>
+      <div class="bloco">
+        <h3>⬜ Fora da empresa</h3>
+        <ul>
+          <li>Sindicatos</li>
+          <li>Políticos e poder público</li>
+          <li>Consultores e palestrantes</li>
+          <li>Empresas terceirizadas</li>
+          <li>A crise que ninguém avisou</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="regras">
+      <strong>Regras do jogo:</strong> em cada situação, escolha entre 5 atitudes possíveis a que você tomaria de verdade. Cada escolha revela a <strong>consequência</strong> — para você e para quem está ao seu lado — e a lição de <strong>Charlie Munger</strong> (1924–2023), sócio de Warren Buffett e autor do célebre catálogo dos 25 vieses do julgamento humano. Boas escolhas rendem <strong>anos de experiência</strong>; más escolhas custam caro. Nesta amostra, o máximo é <strong>12 anos</strong>.
+    </div>
+
+    <button class="principal" onclick="iniciar()">⚜ Começar</button>
+  </div>
+
+  <!-- ==================== TELA DA PERGUNTA ==================== -->
+  <div id="tela-pergunta" class="cartao oculto">
+    <div class="barra-topo" style="color:var(--cinza)">
+      <span id="contador"></span>
+      <span id="placar-parcial"></span>
+    </div>
+    <div class="progresso"><div id="barra"></div></div>
+    <span class="categoria" id="cat"></span>
+    <h2 id="titulo"></h2>
+    <p class="situacao" id="situacao"></p>
+    <div id="alternativas"></div>
+
+    <div class="feedback" id="feedback">
+      <span class="veredito" id="veredito"></span>
+      <div class="consequencia" id="consequencia"></div>
+      <div class="maquiavel">
+        <span id="citacao"></span>
+        <span class="autor" id="fonte"></span>
+      </div>
+      <span class="anos-chip" id="anos-chip"></span>
+      <button class="principal" id="btn-proxima" onclick="proxima()">Próxima situação →</button>
+    </div>
+  </div>
+
+  <!-- ==================== TELA DE RESULTADO ==================== -->
+  <div id="tela-resultado" class="cartao oculto">
+    <span class="selo">Resultado — Versão Charlie Munger</span>
+    <div class="placar-final">
+      <div class="numero" id="total-final"></div>
+      <div class="rotulo">anos de experiência conquistados (de 12 possíveis)</div>
+    </div>
+    <div class="perfil" id="perfil"></div>
+    <h2 style="font-size:1.05rem">Revisão das suas escolhas</h2>
+    <table class="recap">
+      <thead><tr><th>Situação</th><th>Sua atitude</th><th>Anos</th></tr></thead>
+      <tbody id="recap-corpo"></tbody>
+    </table>
+    <button class="principal" onclick="reiniciar()">⟲ Refazer a demonstração</button>
+  </div>
+
+  <footer>“É notável a vantagem de quem tenta apenas não ser consistentemente estúpido, em vez de tentar ser muito inteligente.” — Charlie Munger</footer>
+</div>
+
+<script>
+/* ============================================================
+   BANCO DE SITUAÇÕES
+   anos: 4 = prudente | 2 = razoável | 1 = arriscada | 0 = desastrosa
+   ============================================================ */
+const QUESTOES = [
+{
+cat:"Engenheiros pares",
+ titulo:"A ideia roubada no café",
+ situacao:"Em reunião com o diretor, um engenheiro do seu mesmo nível apresenta como dele a solução técnica que você desenvolveu e comentou informalmente com ele no café, na semana anterior. O diretor está impressionado e elogia o 'autor' na frente de todos.",
+ citacao:"Mostre-me o incentivo e eu lhe mostrarei o resultado. Nunca pense em outra coisa quando deveria estar pensando no poder dos incentivos.",
+ fonte:"Charlie Munger, A Psicologia dos Erros de Julgamento Humano",
+ alts:[
+  {t:"Interromper na hora e desmascará-lo: 'essa ideia é minha, contei a você no café'.", anos:1,
+   cons:"<strong>Consequência:</strong> vira um bate-boca sem provas. O diretor não lembra de quem era a ideia — lembra que vocês dois brigaram na reunião dele. A autoria se perde; a fama de encrenqueiro fica com você.<br><br><strong>🔍 Leitura de Munger:</strong> Você foi capturado pela <em>tendência à hostilidade sob provocação</em>: decidiu no pico da raiva, quando o cérebro pior funciona. Munger mandava esperar: raiva é o viés com o custo mais imediato."},
+  {t:"Ficar quieto para não criar clima ruim; o que importa é a empresa ganhar com a solução.", anos:0,
+   cons:"<strong>Consequência:</strong> o padrão se repete. Em um ano, você virou o fornecedor invisível de ideias do departamento — ele virou gerente. Quem está ao seu lado aprende a mesma lição: com você, pode.<br><br><strong>🔍 Leitura de Munger:</strong> Dois vieses juntos: <em>negação para evitar a dor</em> (fingir que não doeu) e <em>inconsistência-aversão</em> — quanto mais você tolera, mais o padrão vira hábito, seu e dele. O que não é confrontado é treinado."},
+  {t:"Ainda na reunião, complementar a apresentação com os detalhes que só o autor domina — memorial de cálculo, premissas, riscos — e se oferecer para conduzir o detalhamento.", anos:4,
+   cons:"<strong>Consequência:</strong> em cinco minutos fica evidente para todos quem realmente concebeu a solução, sem que você tenha acusado ninguém. O diretor pede que <em>você</em> lidere o projeto. A raposa venceu sem rugir.<br><br><strong>🔍 Leitura de Munger:</strong> Munger puro: <em>inverta, sempre inverta</em>. Em vez de perguntar ‘como puno o ladrão?’, você perguntou ‘o que tornaria impossível me roubarem?’ — e a resposta é domínio que não se copia. Você também mexeu nos incentivos: roubar ideia era barato, você tornou caro."},
+  {t:"Depois da reunião, conversar em particular com o colega, estabelecer o limite — e passar a registrar suas ideias por e-mail antes de qualquer conversa informal.", anos:2,
+   cons:"<strong>Consequência:</strong> o crédito desta vez se perdeu, mas o colega entende que foi percebido e recua. Seus registros escritos o protegem dali em diante. Solução digna — apenas um pouco tardia.<br><br><strong>🔍 Leitura de Munger:</strong> Bom raciocínio de <em>sistema</em>: o registro por escrito muda os incentivos de todas as interações futuras, não só desta. Perdeu a rodada, corrigiu o jogo."},
+  {t:"Espalhar entre os colegas que ele é um ladrão de ideias, para que todos se protejam dele.", anos:0,
+   cons:"<strong>Consequência:</strong> a fofoca chega a ele — e ao diretor — com o seu nome. Agora a disputa é pública e você aparece como ressentido. Quem espalha veneno acaba identificado como a fonte.<br><br><strong>🔍 Leitura de Munger:</strong> <em>Tendência à reciprocidade</em> ignorada: veneno espalhado volta com juros, e a <em>prova social</em> que você tentou mobilizar se virou contra a fonte identificável — você."}
+ ]
+},
+{
+cat:"Diretoria",
+ titulo:"A assinatura sob pressão",
+ situacao:"O diretor pressiona você a assinar a liberação de um equipamento com pendências de segurança, para cumprir o prazo prometido ao cliente: 'depois a gente regulariza, todo mundo faz assim'. A ART é sua. O prazo é amanhã.",
+ citacao:"‘De quem como o pão, dele canto a canção.’ O viés do incentivo torna as pessoas cegas exatamente para aquilo de que o seu sustento depende.",
+ fonte:"Charlie Munger, A Psicologia dos Erros de Julgamento Humano",
+ alts:[
+  {t:"Assinar. Contrariar diretor é suicídio profissional, e provavelmente não vai dar nada.", anos:0,
+   cons:"<strong>Consequência:</strong> se nada acontecer, o diretor aprendeu que pode sempre te dobrar. Se acontecer, a responsabilidade técnica e criminal é <em>sua</em> — o diretor negará a conversa, e sua família pagará junto. Não existe 'assinatura meio comprometida'.<br><br><strong>🔍 Leitura de Munger:</strong> O <em>lollapalooza</em> clássico que leva bons engenheiros à ruína: viés da autoridade (obedecer o diretor) + prova social (‘todo mundo faz assim’) + otimismo excessivo (‘não vai dar nada’). Três vieses empilhados na mesma assinatura — e nenhuma margem de segurança: risco de ruína não se troca por prazo."},
+  {t:"Recusar em alto e bom som, dizendo na frente de todos que isso é crime e que ele responderá por assédio.", anos:1,
+   cons:"<strong>Consequência:</strong> você está certo no conteúdo e errado na forma. O diretor, humilhado, passa a te fritar em tudo. A empresa não te demite por isso — apenas te esquece. Guerra declarada sem aliados é derrota anunciada.<br><br><strong>🔍 Leitura de Munger:</strong> Conteúdo certo, processo dominado pela <em>hostilidade</em>: você transformou um problema de engenharia num duelo de egos e perdeu os aliados de que a razão precisaria depois."},
+  {t:"Recusar por escrito, com fundamento técnico — e apresentar no mesmo documento um plano de liberação parcial/faseada que preserve o prazo comercial nas partes seguras.", anos:4,
+   cons:"<strong>Consequência:</strong> o diretor não ganhou a assinatura, mas ganhou uma saída para o cliente — e você, blindagem documental. A recusa sem alternativa é confronto; a recusa com alternativa é engenharia. Seu nome sobe na lista dos que resolvem.<br><br><strong>🔍 Leitura de Munger:</strong> Munger aplaudiria de pé: você identificou o incentivo real do diretor (o prazo prometido) e o atendeu sem aceitar risco de ruína. E aplicou a inversão: ‘o que garantiria o desastre?’ — assinar. Logo, não assine; ofereça o caminho que preserva os dois."},
+  {t:"Acionar formalmente a área de segurança do trabalho/qualidade para uma avaliação conjunta antes de qualquer assinatura.", anos:2,
+   cons:"<strong>Consequência:</strong> você dividiu o peso da decisão com quem tem mandato para isso — movimento legítimo. Perde alguma autonomia e o diretor nota a manobra, mas ninguém pode puni-lo por seguir o rito. Defesa sólida, ainda que sem o brilho de quem trouxe a solução.<br><br><strong>🔍 Leitura de Munger:</strong> O antídoto institucional que Munger recomendava copiar da aviação: quando o julgamento individual está sob pressão, aciona-se o <em>sistema</em> — checklists, segundas opiniões, mandatos formais."},
+  {t:"Assinar, mas guardar e-mails e gravações provando que foi pressionado.", anos:0,
+   cons:"<strong>Consequência:</strong> as provas mostram que você <em>sabia</em> do risco e assinou mesmo assim — elas condenam você primeiro. Perante o conselho de ética e a Justiça, a pressão não transfere a responsabilidade de quem detém a prerrogativa técnica.<br><br><strong>🔍 Leitura de Munger:</strong> O autoengano mais caro da lista: as provas que você guardou documentam que você <em>conhecia</em> o risco e assinou mesmo assim. O viés do incentivo fez você ler o documento errado — o que te condena, não o que te salva."}
+ ]
+},
+{
+cat:"A crise",
+ titulo:"Madrugada de sexta-feira",
+ situacao:"Duas da manhã: falha grave na planta, princípio de incêndio controlado, um terceirizado hospitalizado em observação. A imprensa local já ligou na portaria. O diretor, em pânico, telefona: 'Resolve isso AGORA'. Todos os olhos — equipe, empresa, cidade — se voltam para você.",
+ citacao:"É notável a vantagem de longo prazo que pessoas como nós obtiveram tentando apenas não ser consistentemente estúpidas, em vez de tentar ser muito inteligentes.",
+ fonte:"Charlie Munger, Poor Charlie's Almanack",
+ alts:[
+  {t:"Aguardar instruções detalhadas da diretoria antes de qualquer movimento: em crise, quem age sem ordem paga sozinho.", anos:1,
+   cons:"<strong>Consequência:</strong> a diretoria, em pânico, não instrui — cobra. Cada hora de espera amplia o dano e a versão da imprensa se consolida sem a da empresa. Na apuração, a pergunta não será 'quem mandou?', e sim 'quem era o engenheiro responsável e por que não agiu?'.<br><br><strong>🔍 Leitura de Munger:</strong> <em>Viés da autoridade</em> em pânico: esperar ordens de quem está mais assustado e mais longe dos fatos que você. A hierarquia não substitui o julgamento de quem está no local — ela cobra esse julgamento depois."},
+  {t:"Executar o plano de emergência ensaiado: pessoas em segurança primeiro, porta-voz único definido, registro escrito de cada decisão com horário, e reporte periódico à diretoria.", anos:4,
+   cons:"<strong>Consequência:</strong> o dique construído na calmaria segura a cheia. O terceirizado recebe atenção total — e a família dele, um interlocutor humano. A imprensa recebe fatos de uma única voz, não versões desencontradas. Semanas depois, a auditoria encontra decisões documentadas e defensáveis. A fortuna bateu; a virtù respondeu.<br><br><strong>🔍 Leitura de Munger:</strong> O antídoto-mestre de Munger, copiado da aviação: o <em>checklist</em>. O plano ensaiado impede o lollapalooza do pânico (estresse + urgência + prova social em cascata) exatamente porque foi escrito quando ninguém estava em pânico."},
+  {t:"Atender a imprensa imediatamente por telefone, de improviso, para acalmar: 'está tudo sob controle, foi um incidente menor'.", anos:0,
+   cons:"<strong>Consequência:</strong> às 2h você não <em>sabe</em> se está tudo sob controle. Se o quadro do terceirizado piorar, sua frase vira manchete — 'empresa minimizou acidente' — e prova contra a companhia. Em crise, palavra sem fato confirmado é passivo com juros.<br><br><strong>🔍 Leitura de Munger:</strong> <em>Excesso de confiança</em> + ilusão de que palavras controlam fatos: às 2h você não sabe o que aconteceu, mas prometeu à imprensa que sabia. Quando o quadro mudar, a frase vira passivo."},
+  {t:"Começar ainda de madrugada a apurar de quem foi a culpa, para chegar ao amanhecer com um responsável identificado.", anos:0,
+   cons:"<strong>Consequência:</strong> enquanto você caça culpados, ninguém coordena a resposta — e a equipe, vendo a caça às bruxas começar antes do incêndio acabar, passa a esconder informação exatamente quando você mais precisa dela. Culpa se apura depois; vidas e planta se protegem agora.<br><br><strong>🔍 Leitura de Munger:</strong> <em>Viés da primeira conclusão</em>: o cérebro adora fechar a questão antes dos fatos. Caçar culpados no meio do incêndio é decidir com 5% da informação — e ensina a equipe a esconder os outros 95%."},
+  {t:"Assumir pessoalmente a contenção técnica e deixar comunicação, família e diretoria para quando o problema físico estiver resolvido.", anos:2,
+   cons:"<strong>Consequência:</strong> a contenção funciona — seu terreno é esse. Mas o silêncio de quatro horas custa caro: a imprensa publica a versão que tinha, a família do terceirizado sabe do acidente pelo rádio, e o diretor, sem notícias, toma decisões erradas por conta própria. Crise tem duas frentes: a física e a narrativa. Você venceu uma.<br><br><strong>🔍 Leitura de Munger:</strong> Competência num front, <em>negação</em> no outro: você resolveu a física e ignorou os incentivos da imprensa — sem fatos oficiais, ela publica o que tem. Sistemas falham nas interfaces, não nos centros."}
+ ]
+}
+];
+
+/* ============================================================
+   PERFIS FINAIS
+   ============================================================ */
+const PERFIS = [
+ {min:10, nome:"🧮 Racional Consistente", desc:"Você fez o que Munger considerava todo o segredo: <strong>não foi consistentemente estúpido</strong>. Identificou os incentivos por trás de cada pressão, desconfiou da autoridade em pânico e da prova social, e usou sistemas (registro, checklist, inversão) no lugar do improviso. É o perfil que sobrevive aos lollapaloozas da carreira."},
+ {min:6, nome:"⚖️ Racional Intermitente", desc:"Parte das suas escolhas seguiu a razão; outra parte foi capturada por vieses — provavelmente autoridade, prova social ou hostilidade. Releia as situações em que marcou 0 ou 1: identifique <em>qual viés</em> te pegou. Munger dizia que conhecer a lista já é metade da defesa."},
+ {min:0, nome:"🎪 Capturado pelos Vieses", desc:"Suas escolhas foram um desfile dos erros do catálogo de Munger: obedecer a autoridade errada, seguir o ‘todo mundo faz assim’, decidir com raiva, negar o problema. A boa notícia: vieses são previsíveis — e o que é previsível é evitável. Refaça o quiz perguntando a cada alternativa: ‘que incentivo está operando aqui?’"}
+];
+
+/* ============================================================
+   MOTOR DO QUIZ
+   ============================================================ */
+let indice = 0, total = 0, historico = [];
+const LETRAS = ["a","b","c","d","e"];
+const $ = id => document.getElementById(id);
+
+function embaralhar(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+// pré-embaralha as alternativas de cada questão a cada rodada
+let ORDEM = [];
+function prepararRodada(){
+  ORDEM = QUESTOES.map(q => embaralhar(q.alts));
+}
+
+function iniciar(){
+  indice = 0; total = 0; historico = [];
+  prepararRodada();
+  $("tela-inicio").classList.add("oculto");
+  $("tela-resultado").classList.add("oculto");
+  $("tela-pergunta").classList.remove("oculto");
+  render();
+}
+
+function render(){
+  const q = QUESTOES[indice];
+  $("contador").textContent = "Situação " + (indice+1) + " de " + QUESTOES.length;
+  $("placar-parcial").textContent = "⚜ " + total + (total===1?" ano":" anos") + " de experiência";
+  $("barra").style.width = (indice/QUESTOES.length*100) + "%";
+  $("cat").textContent = q.cat;
+  $("titulo").textContent = q.titulo;
+  $("situacao").textContent = q.situacao;
+  $("feedback").style.display = "none";
+
+  const box = $("alternativas");
+  box.innerHTML = "";
+  ORDEM[indice].forEach((alt,i)=>{
+    const b = document.createElement("button");
+    b.className = "alt";
+    b.innerHTML = '<span class="letra">'+LETRAS[i]+')</span>'+alt.t;
+    b.onclick = ()=>responder(b, alt, q);
+    box.appendChild(b);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function responder(botao, alt, q){
+  document.querySelectorAll(".alt").forEach(b=>b.disabled=true);
+  botao.classList.add("escolhida","n"+alt.anos);
+  total += alt.anos;
+  historico.push({titulo:q.titulo, cat:q.cat, escolha:alt.t, anos:alt.anos});
+
+  const v = $("veredito");
+  const rotulos = {4:"Escolha prudente", 2:"Escolha razoável", 1:"Escolha arriscada", 0:"Escolha desastrosa"};
+  v.textContent = rotulos[alt.anos];
+  v.className = "veredito n"+alt.anos;
+
+  $("consequencia").innerHTML = alt.cons;
+  $("citacao").textContent = "“" + q.citacao + "”";
+  $("fonte").textContent = "— " + q.fonte;
+  $("anos-chip").textContent = "⚜ +" + alt.anos + (alt.anos===1?" ano":" anos") + " de experiência";
+  $("placar-parcial").textContent = "⚜ " + total + (total===1?" ano":" anos") + " de experiência";
+  $("btn-proxima").textContent = (indice === QUESTOES.length-1) ? "Ver meu resultado →" : "Próxima situação →";
+  $("feedback").style.display = "block";
+  $("feedback").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function proxima(){
+  indice++;
+  if(indice < QUESTOES.length){ render(); }
+  else { resultado(); }
+}
+
+function resultado(){
+  $("tela-pergunta").classList.add("oculto");
+  $("tela-resultado").classList.remove("oculto");
+  $("total-final").textContent = total;
+
+  const p = PERFIS.find(p => total >= p.min);
+  $("perfil").innerHTML = "<h3>"+p.nome+"</h3><p>"+p.desc+"</p>";
+
+  const corpo = $("recap-corpo");
+  corpo.innerHTML = "";
+  historico.forEach(h=>{
+    const cores = {4:"#2e7d4f",2:"#2f6da8",1:"#c07f18",0:"#b3452e"};
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td><strong>"+h.titulo+"</strong><br><span style='font-size:.78rem;color:#8a7a55'>"+h.cat+"</span></td>"+
+                   "<td>"+h.escolha+"</td>"+
+                   "<td class='pt' style='color:"+cores[h.anos]+"'>+"+h.anos+"</td>";
+    corpo.appendChild(tr);
+  });
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function reiniciar(){ iniciar(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Engenheiro e os Mestres — Escolha seu Mentor</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:linear-gradient(160deg,#161a26 0%,#232a3d 60%,#1c2130 100%);
+    color:#f7f2e8;min-height:100vh;padding:34px 14px 60px;
+  }
+  .container{max-width:980px;margin:0 auto;}
+  header{text-align:center;margin-bottom:10px;}
+  header h1{font-size:1.9rem;letter-spacing:.5px;}
+  header h1 span{color:#c9971c;}
+  header p.sub{font-style:italic;color:#cbb87f;margin-top:8px;font-size:1rem;}
+  p.chamada{
+    text-align:center;color:#b9c0d2;max-width:680px;margin:14px auto 30px;
+    line-height:1.6;font-size:.98rem;
+  }
+  .grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+  .cartao-mentor{
+    display:block;background:#f7f2e8;color:#1c2130;border-radius:14px;
+    padding:24px 22px 20px;text-decoration:none;position:relative;
+    border:1px solid #d8caa8;box-shadow:0 8px 24px rgba(0,0,0,.4);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cartao-mentor:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(0,0,0,.55);}
+  .cartao-mentor.destaque{
+    grid-column:1/-1;background:linear-gradient(135deg,#fdf6e4,#f3e6c6);
+    border:2px solid #c9971c;
+  }
+  .emblema{font-size:2.2rem;margin-bottom:8px;}
+  .cartao-mentor h2{font-size:1.3rem;margin-bottom:2px;}
+  .epoca{
+    font-family:Verdana,Arial,sans-serif;font-size:.72rem;letter-spacing:1px;
+    text-transform:uppercase;color:#9a7210;margin-bottom:10px;
+  }
+  .desc{line-height:1.5;font-size:.95rem;margin-bottom:14px;color:#3a4258;}
+  .badge{
+    font-family:Verdana,Arial,sans-serif;font-size:.72rem;letter-spacing:.8px;
+    background:#1c2130;color:#e8c25a;padding:4px 12px;border-radius:14px;
+  }
+  .entrar{
+    position:absolute;right:20px;bottom:18px;color:#9a7210;font-weight:bold;
+    font-size:.95rem;
+  }
+  footer{
+    text-align:center;margin-top:34px;color:#8b93a8;font-size:.82rem;font-style:italic;
+    line-height:1.6;
+  }
+  footer a{color:#cbb87f;}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>O Engenheiro e <span>os Mestres</span></h1>
+    <p class="sub">Simuladores das relações de poder que a faculdade de engenharia não ensina</p>
+  </header>
+  <p class="chamada">As mesmas situações reais da carreira do engenheiro — o colega que rouba a ideia, o diretor que pressiona pela assinatura, a crise de madrugada — avaliadas por seis mestres do comportamento humano. Cada mentor ilumina um ângulo que os outros não veem. Escolha por onde começar:</p>
+  <div class="grade">
+    <a class="cartao-mentor destaque" href="quiz_engenheiro_maquiavel.html">
+      <div class="emblema">⚜</div>
+      <h2>Nicolau Maquiavel</h2>
+      <p class="epoca">O Príncipe · 1469–1527</p>
+      <p class="desc">O poder como ele é: a jornada completa do engenheiro, da equipe ao conselho, do sindicato à crise.</p>
+      <span class="badge">13 situações · versão completa</span>
+      <span class="entrar">Entrar →</span>
+    </a>
+    <a class="cartao-mentor" href="munger.html">
+      <div class="emblema">🧮</div>
+      <h2>Charlie Munger</h2>
+      <p class="epoca">Erros de Julgamento · 1924–2023</p>
+      <p class="desc">Os vieses que fazem pessoas inteligentes tomarem decisões desastrosas — e os antídotos.</p>
+      <span class="badge">3 situações</span>
+      <span class="entrar">Entrar →</span>
+    </a>
+    <a class="cartao-mentor" href="suntzu.html">
+      <div class="emblema">🏯</div>
+      <h2>Sun Tzu</h2>
+      <p class="epoca">A Arte da Guerra · séc. V a.C.</p>
+      <p class="desc">Vencer sem lutar: o terreno, o momento e a ponte de ouro para o adversário.</p>
+      <span class="badge">3 situações</span>
+      <span class="entrar">Entrar →</span>
+    </a>
+    <a class="cartao-mentor" href="seneca.html">
+      <div class="emblema">🏛️</div>
+      <h2>Sêneca</h2>
+      <p class="epoca">Estoicismo · 4 a.C.–65 d.C.</p>
+      <p class="desc">O que depende de você — e a serenidade que não é dom, é treino.</p>
+      <span class="badge">3 situações</span>
+      <span class="entrar">Entrar →</span>
+    </a>
+    <a class="cartao-mentor" href="jung.html">
+      <div class="emblema">🌗</div>
+      <h2>Carl Jung</h2>
+      <p class="epoca">Psicologia Profunda · 1875–1961</p>
+      <p class="desc">Persona, sombra e projeção: que parte de você está decidindo?</p>
+      <span class="badge">3 situações</span>
+      <span class="entrar">Entrar →</span>
+    </a>
+    <a class="cartao-mentor" href="freud.html">
+      <div class="emblema">🛋️</div>
+      <h2>Sigmund Freud</h2>
+      <p class="epoca">Psicanálise · 1856–1939</p>
+      <p class="desc">Transferência e mecanismos de defesa: só Freud explica — inclusive no escritório.</p>
+      <span class="badge">3 situações</span>
+      <span class="entrar">Entrar →</span>
+    </a>
+  </div>
+  <footer>
+    Em cada situação, escolha entre 5 atitudes e descubra a consequência — para você e para quem está ao seu lado.<br>
+    Boas escolhas rendem anos de experiência simulada. Conhece alguém começando a carreira? Compartilhe esta página.
+  </footer>
+</div>
+</body>
+</html>
